@@ -30,6 +30,22 @@ const Studenthistory = ({ data }) => {
     };
     return new Date(dateString).toLocaleString("en-IN", options);
   };
+  const downloadResume = async (resumeFileName) => {
+    try {
+      const res = await fetch(`http://localhost:5000/files/${resumeFileName}`);
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", resumeFileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file: ", error);
+    }
+  };
+
 
   return (
     <div className="overflow-x-auto">
@@ -51,7 +67,8 @@ const Studenthistory = ({ data }) => {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <a
-                  href={`/resumes/${item.resume}`}
+                  href={`http://localhost:5000/files/${item.resume}`}
+                  target="_blank"
                   className="text-blue-500 underline"
                 >
                   {item.resume}
@@ -59,9 +76,17 @@ const Studenthistory = ({ data }) => {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <button className="px-3 py-1 bg-blue-500 text-white rounded-md mr-2">
-                  View
+                  <a
+                    href={`http://localhost:5000/files/${item.resume}`}
+                    target="_blank"
+                  >
+                    View
+                  </a>
                 </button>
-                <button className="px-3 py-1 bg-green-500 text-white rounded-md">
+                <button
+                  className="px-3 py-1 bg-green-500 text-white rounded-md"
+                  onClick={() => downloadResume(item.resume)}
+                >
                   Download
                 </button>
               </td>

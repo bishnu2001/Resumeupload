@@ -75,7 +75,7 @@ const Login = () => {
           disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {loading ? "Loading" : "Login in"}
+          {loading ? "Loading" : "Log in"}
         </button>
       </form>
       {error && <p className="text-red-500 mt-5">{error.message}</p>}

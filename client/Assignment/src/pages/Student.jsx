@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Student = () => {
   const [formData, setFormData] = useState({
@@ -8,11 +8,19 @@ const Student = () => {
     resume: null,
   });
 
+  useEffect(() => {
+    const storedData = localStorage.getItem("formData");
+    if (storedData) {
+      setFormData(JSON.parse(storedData));
+    }
+  }, []);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    localStorage.setItem("formData", JSON.stringify(formData));
   };
 
   const handleFileChange = (e) => {
@@ -20,6 +28,7 @@ const Student = () => {
       ...formData,
       resume: e.target.files[0],
     });
+    localStorage.setItem("formData", JSON.stringify(formData));
   };
 
   const handleSubmit = async (e) => {
@@ -41,19 +50,28 @@ const Student = () => {
 
       // Handle success
       alert("Form submitted successfully!");
+
+      // Clear form data
+      setFormData({
+        name: "",
+        email: "",
+        contactNumber: "",
+        resume: null,
+      });
+      localStorage.removeItem("formData");
     } catch (error) {
       console.error("Error submitting form: ", error);
       // Handle error
       alert("Error submitting form. Please try again.");
     }
-
-    console.log(formData);
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Student Details Form</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        Student Details Form
+      </h1>
+      <form onSubmit={handleSubmit} className="max-w-lg mx-auto">
         <div className="mb-4">
           <label htmlFor="name" className="block font-semibold mb-1">
             Name:

@@ -13,6 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
+const path = require('path');
+const uploadsDirectory = path.join(__dirname, 'uploads');
+app.use('/files', express.static(uploadsDirectory));
 app.get("/", (req, res) => {
   res.send("Welcome to the API");
 });
